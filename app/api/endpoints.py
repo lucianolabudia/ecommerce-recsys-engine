@@ -1,5 +1,5 @@
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 from typing import List, Optional
 import pickle
@@ -38,6 +38,24 @@ except FileNotFoundError as e:
     user_item_matrix = None
     product_catalog = None
 
+# --- Load translations ---
+translations_path = os.path.join(MODEL_PATH, "product_translations.pkl")
+product_translations = {}
+if os.path.exists(translations_path):
+    with open(translations_path, "rb") as f:
+        product_translations = pickle.load(f)
+    print(f"✅ Traducciones cargadas: {len(product_translations)} entradas.")
+else:
+    print("⚠️  Traducciones no encontradas. Ejecute scripts/translate_catalog.py.")
+
+
+def _translate(name: str, lang: str) -> str:
+    """Translate a product name to the requested language."""
+    if lang == "es" and product_translations:
+        return product_translations.get(name, product_translations.get(name.upper(), name))
+    return name
+
+
 # --- Schemas ---
 class RecommendationRequest(BaseModel):
     user_id: int
@@ -54,10 +72,11 @@ class ProductRecommendation(BaseModel):
 
 # --- Endpoints ---
 
-@router.get("/user/{user_id}", response_model=List[ProductRecommendation])
-def recommend_user(user_id: int, top_n: int = 5):
+@router.get("/user/{user_id}", response_model=List[ProductRecommendation], summary="Personalized User Recommendations / Recomendaciones Personalizadas de Usuario")
+def recommend_user(user_id: int, top_n: int = 5, lang: str = Query(default="en")):
     """
-    Recomendación Filtro Colaborativo (SVD)
+    **EN**: Get personalized recommendations using Collaborative Filtering.
+    **ES**: Obtiene recomendaciones personalizadas usando Filtro Colaborativo.
     """
     if corr_matrix is None or user_item_matrix is None:
         raise HTTPException(status_code=503, detail="Modelos no cargados")
@@ -100,14 +119,15 @@ def recommend_user(user_id: int, top_n: int = 5):
         except KeyError:
             name = f"Unknown Product ({code})"
             
-        results.append(ProductRecommendation(rank=i+1, product_name=str(name), score=rec_counts[code]))
+        results.append(ProductRecommendation(rank=i+1, product_name=_translate(str(name), lang), score=rec_counts[code]))
         
     return results
 
-@router.post("/association", response_model=List[ProductRecommendation])
-def recommend_association(request: AssociationRequest):
+@router.post("/association", response_model=List[ProductRecommendation], summary="Recommendations by Cart / Recomendaciones por Carrito")
+def recommend_association(request: AssociationRequest, lang: str = Query(default="en")):
     """
-    Recomendación por Reglas de Asociación (Apriori)
+    **EN**: Get recommendations based on items in the cart.
+    **ES**: Obtiene recomendaciones basadas en los productos del carrito.
     """
     if rules is None:
         raise HTTPException(status_code=503, detail="Modelo de reglas no cargado")
@@ -136,7 +156,7 @@ def recommend_association(request: AssociationRequest):
             if product not in seen_products:
                 recommendations.append(ProductRecommendation(
                     rank=rank,
-                    product_name=str(product),
+                    product_name=_translate(str(product), lang),
                     score=row['confidence']
                 ))
                 seen_products.add(product)
