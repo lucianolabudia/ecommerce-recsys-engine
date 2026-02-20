@@ -1,107 +1,152 @@
 # 🛒 E-Commerce Recommendation System Engine
 
-![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white)
-![React](https://img.shields.io/badge/React-18.0+-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![Pandas](https://img.shields.io/badge/Pandas-2.0+-150458?style=for-the-badge&logo=pandas&logoColor=white)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-18.0+-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
+[![Pandas](https://img.shields.io/badge/Pandas-2.0+-150458?style=for-the-badge&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-Un motor de recomendaciones inteligente y dashboard analítico para E-commerce, desarrollado con un enfoque híbrido de **Filtro Colaborativo** y **Reglas de Asociación**.
+## 🌐 Overview
 
-## ✨ Características Principales
+This project is a **professional-grade recommendation engine** and analytics dashboard designed specifically for e-commerce environments. It leverages high-performance algorithms to deliver personalized user experiences and drive business growth through data-driven insights.
 
-- **Dashboard Moderno**: Interfaz interactiva construida con React, Vite y Lucide Icons.
-- **Recomendaciones Personalizadas**: Motor basado en SVD (Singular Value Decomposition) para sugerencias personalizadas por usuario.
-- **Market Basket Analysis**: Reglas de asociación (Apriori) para detectar productos que se compran juntos frecuentemente.
-- **Soporte Bilingüe (EN/ES)**: Traducción automática de todo el catálogo de productos utilizando Google Translate API.
-- **Búsqueda Inteligente**: Autocompletado de productos y usuarios en tiempo real.
-- **Visualización Analítica**: Gráficos interactivos de rendimiento, distribución de ventas y KPIs.
+Developed as a full-stack solution, it combines a robust **Python/FastAPI** backend with a modern, high-speed **React/Vite** frontend, demonstrating an end-to-end integration of Machine Learning models into a production-ready application.
 
-## 🚀 Instalación y Configuración
+---
 
-### 1. Clonar el repositorio
+## 🚀 Key Features
 
-```bash
-git clone https://github.com/lucianolabudia/ecommerce-recsys-engine.git
-cd ecommerce-recsys-engine
+### 🧠 Hybrid Recommendation Engine
+
+- **Personalized User Filtering**: Implements **Singular Value Decomposition (SVD)** via Collaborative Filtering to suggest products based on historical user behavior and similarity mapping.
+- **Market Basket Analysis (MBA)**: Utilizes the **Apriori Algorithm** to discover frequent itemsets and generate association rules (e.g., "Customers who bought X also bought Y") for cross-selling.
+
+### 📊 Real-Time Analytics Dashboard
+
+- **Executive KPIs**: Track total users, unique products, total transactions, and model health metrics.
+- **Visual Analytics**: Interactive charts (Bar, Area, Pie, Scatter) to monitor recommendation distribution and product performance.
+- **Product Catalog Management**: Fully paginated catalog with advanced search capabilities.
+
+### 🌍 Localization & Smart Search
+
+- **Bilingual Support (EN/ES)**: Integrated translation engine that handles over 3,500 product descriptions for a global audience.
+- **Advanced Autocomplete**: Real-time search for both users and products, optimized for high responsiveness.
+
+---
+
+## 🛠️ Tech Stack & Architecture
+
+### Backend (The Brain)
+
+- **FastAPI**: High-performance asynchronous framework for the REST API.
+- **Scikit-Learn & Scikit-Surprise**: Advanced Matrix Factorization for Collaborative Filtering.
+- **MLxtend**: Efficient implementation of the Apriori algorithm and association rules.
+- **Pandas/NumPy**: Heavy-duty data processing and cleaning pipeline.
+
+### Frontend (The Face)
+
+- **React (18+)**: Component-based UI for a responsive and stateful experience.
+- **Vite**: Ultra-fast build tool for the modern web.
+- **Recharts**: Data visualization for complex metrics.
+- **Lucide Icons & Vanila CSS**: Clean, premium design aesthetic without heavy weight.
+
+### Data Workflow
+
+```mermaid
+graph LR
+    A[Raw Data] --> B[Cleaning & EDA]
+    B --> C[Feature Engineering]
+    C --> D[SVD Model]
+    C --> E[Apriori Rules]
+    D --> F[FastAPI Service]
+    E --> F
+    F --> G[React Dashboard]
 ```
 
-### 2. Configurar el Backend (Python)
+---
+
+## 📈 Business Value
+
+- **Conversion Optimization**: Personalized recommendations reduce friction and help users find relevant products faster.
+- **AOV Growth**: Association rules strategically encourage cross-selling, increasing the Average Order Value.
+- **Data-Driven Decisions**: Direct visibility into model performance and sales distribution allows for targeted marketing strategies.
+
+---
+
+## 📥 Installation
+
+### Prerequisites
+
+- Python 3.10+
+- Node.js & npm
+- Git
+
+### Backend Setup
 
 ```bash
-# Crear entorno virtual
+# Clone the repository
+git clone https://github.com/lucianolabudia/ecommerce-recsys-engine.git
+cd ecommerce-recsys-engine
+
+# Initialize Environment
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1  # Windows
 
-# Instalar dependencias
+# Install Dependencies
 pip install -r requirements.txt
-pip install deep-translator  # Para el motor de traducción
+pip install deep-translator
 ```
 
-### 3. Configurar el Frontend (React)
+### Frontend Setup
 
 ```bash
 cd dashboard
 npm install
 ```
 
-### 4. Preparar los Datos y Modelos
+---
 
-El sistema descarga automáticamente el dataset usando `kagglehub`. Ejecuta los notebooks en orden para entrenar los modelos o corre el script de traducción:
+## 🖥️ Running the Application
 
-```bash
-# Traducir catálogo al español
-python scripts/translate_catalog.py
-```
+1. **Start the API**:
 
-## 🛠️ Uso del Sistema
+   ```bash
+   python -m uvicorn app.main:app --reload
+   ```
 
-### Iniciar el Servidor API (Backend)
+   Interact with the API via Swagger: `http://localhost:8000/docs`
 
-Desde la raíz del proyecto:
+2. **Start the Dashboard**:
 
-```bash
-python -m uvicorn app.main:app --reload
-```
+   ```bash
+   cd dashboard
+   npm run dev
+   ```
 
-Acceso a Swagger UI: `http://localhost:8000/docs`
+   Browse the UI at: `http://localhost:5173`
 
-### Iniciar el Dashboard (Frontend)
+3. **Data Localization (Optional)**:
+   ```bash
+   python scripts/translate_catalog.py
+   ```
 
-Desde la carpeta `dashboard`:
+---
 
-```bash
-npm run dev
-```
+## ✅ System Validation
 
-Acceso al Dashboard: `http://localhost:5173`
-
-## 📊 Estructura del Proyecto
-
-```
-ecommerce-recsys-engine/
-├── app/
-│   ├── api/            # Endpoints de la API (Dashboard, Recs, Search)
-│   ├── services/       # Lógica del motor y modelos entrenados (.pkl)
-│   └── main.py         # Punto de entrada FastAPI
-├── dashboard/          # Aplicación Frontend React + Vite
-├── scripts/            # Scripts de traducción y validación
-├── notebooks/          # Exploración y entrenamiento de modelos
-├── requirements.txt    # Dependencias de Python
-└── README.md           # Documentación
-```
-
-## ✅ Validación del Sistema
-
-Puedes ejecutar el script de validación para asegurar que todos los servicios responden correctamente:
+To ensure all systems are running at peak performance, execute the automated validation suite:
 
 ```bash
 python scripts/validate_system.py
 ```
 
-## 🤝 Contribución
+---
 
-Las contribuciones son bienvenidas. Siéntete libre de abrir un Pull Request o Issue.
+## 📬 Contact & Portfolio
 
-## 📄 Licencia
+**Luciano Labudía**  
+[GitHub Profile](https://github.com/lucianolabudia) | [LinkedIn](https://linkedin.com/in/lucianolabudia)
 
-Este proyecto está bajo la Licencia MIT.
+---
+
+_This project was developed with a focus on high availability, clean code principles, and real-world scalability._
