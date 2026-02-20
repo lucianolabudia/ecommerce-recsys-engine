@@ -25,8 +25,8 @@ Este plan detalla los pasos para construir un sistema de recomendación utilizan
 ## Fase 2: Adquisición y Preparación de Datos
 
 1.  **Ingesta de Datos**:
-    - Descargar el dataset "Online Retail" (formato `.xlsx` o `.csv`) desde Kaggle o UCI.
-    - Cargar el dataset en un DataFrame de Pandas.
+    - Utilizar la librería `kagglehub` para cargar el dataset "Online Retail" directamente desde Kaggle sin necesidad de descarga manual de archivos.
+    - Cargar el dataset en un DataFrame de Pandas usando `KaggleDatasetAdapter`.
 2.  **Limpieza de Datos**:
     - **Manejo de Nulos**: Eliminar registros con `CustomerID` nulo, ya que necesitamos identificar usuarios para el filtro colaborativo.
     - **Transacciones Canceladas**: Filtrar facturas (`InvoiceNo`) que comiencen con 'C'.
