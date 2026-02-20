@@ -1,97 +1,107 @@
-# Product Recommendation System
+# 🛒 E-Commerce Recommendation System Engine
 
-Un sistema de recomendación inteligente para E-commerce, desarrollado con Python, Machine Learning y FastAPI.
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-18.0+-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Pandas](https://img.shields.io/badge/Pandas-2.0+-150458?style=for-the-badge&logo=pandas&logoColor=white)
 
-## Descripción del Proyecto
+Un motor de recomendaciones inteligente y dashboard analítico para E-commerce, desarrollado con un enfoque híbrido de **Filtro Colaborativo** y **Reglas de Asociación**.
 
-Este proyecto implementa dos enfoques complementarios de recomendación de productos para aumentar el ticket promedio y mejorar la experiencia del usuario final:
+## ✨ Características Principales
 
-1.  **Filtro Colaborativo (SVD)**: Sugiere productos basándose en las preferencias similares entre usuarios ("A los usuarios como tú les gustó esto").
-2.  **Reglas de Asociación (Apriori)**: Identifica patrones de compra frecuentes ("Comprados juntos habitualmente") para sugerencias de venta cruzada en el carrito.
+- **Dashboard Moderno**: Interfaz interactiva construida con React, Vite y Lucide Icons.
+- **Recomendaciones Personalizadas**: Motor basado en SVD (Singular Value Decomposition) para sugerencias personalizadas por usuario.
+- **Market Basket Analysis**: Reglas de asociación (Apriori) para detectar productos que se compran juntos frecuentemente.
+- **Soporte Bilingüe (EN/ES)**: Traducción automática de todo el catálogo de productos utilizando Google Translate API.
+- **Búsqueda Inteligente**: Autocompletado de productos y usuarios en tiempo real.
+- **Visualización Analítica**: Gráficos interactivos de rendimiento, distribución de ventas y KPIs.
 
-## Contexto y Objetivo
+## 🚀 Instalación y Configuración
 
-Utilizando el dataset **Online Retail** (UCI ML Repository), el objetivo es predecir qué productos serían de interés para un cliente específico basándose en su historial de transacciones.
+### 1. Clonar el repositorio
 
-## Dataset
+```bash
+git clone https://github.com/lucianolabudia/ecommerce-recsys-engine.git
+cd ecommerce-recsys-engine
+```
 
-- **Fuente**: [Online Retail Data Set (Kaggle)](https://www.kaggle.com/datasets/tunguz/online-retail)
-- **Contenido**: Transacciones de un retail online basado en UK, entre 01/12/2010 y 09/12/2011.
+### 2. Configurar el Backend (Python)
 
-## Tecnologías Utilizadas
+```bash
+# Crear entorno virtual
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1  # Windows
 
-- **Lenguaje**: Python 3.10+
-- **Web Framework**: FastAPI (Backend API)
-- **Data Science & ML**:
-  - `pandas`, `numpy`: Manipulación y limpieza de datos.
-  - `scikit-learn`: Modelado (SVD/TruncatedSVD) y métricas.
-  - `mlxtend`: Algoritmo Apriori para Reglas de Asociación.
-- **Visualización**: `matplotlib`, `seaborn` (EDA).
-- **Servidor**: Uvicorn.
+# Instalar dependencias
+pip install -r requirements.txt
+pip install deep-translator  # Para el motor de traducción
+```
 
-## Estructura del Proyecto
+### 3. Configurar el Frontend (React)
+
+```bash
+cd dashboard
+npm install
+```
+
+### 4. Preparar los Datos y Modelos
+
+El sistema descarga automáticamente el dataset usando `kagglehub`. Ejecuta los notebooks en orden para entrenar los modelos o corre el script de traducción:
+
+```bash
+# Traducir catálogo al español
+python scripts/translate_catalog.py
+```
+
+## 🛠️ Uso del Sistema
+
+### Iniciar el Servidor API (Backend)
+
+Desde la raíz del proyecto:
+
+```bash
+python -m uvicorn app.main:app --reload
+```
+
+Acceso a Swagger UI: `http://localhost:8000/docs`
+
+### Iniciar el Dashboard (Frontend)
+
+Desde la carpeta `dashboard`:
+
+```bash
+npm run dev
+```
+
+Acceso al Dashboard: `http://localhost:5173`
+
+## 📊 Estructura del Proyecto
 
 ```
 ecommerce-recsys-engine/
 ├── app/
-│   ├── api/            # Endpoints de la API (Rutas)
-│   ├── core/           # Configuración (Logging, Settings)
-│   ├── models/         # Modelos de datos (Pydantic Schemas)
-│   └── services/       # Lógica de negocio y algoritmos de ML
-├── data/               # Almacenamiento local del dataset (ignorado por Git)
-├── notebooks/          # Jupyter Notebooks para EDA y Prototipado
-├── requirements.txt    # Dependencias del proyecto
-└── README.md           # Documentación del proyecto
+│   ├── api/            # Endpoints de la API (Dashboard, Recs, Search)
+│   ├── services/       # Lógica del motor y modelos entrenados (.pkl)
+│   └── main.py         # Punto de entrada FastAPI
+├── dashboard/          # Aplicación Frontend React + Vite
+├── scripts/            # Scripts de traducción y validación
+├── notebooks/          # Exploración y entrenamiento de modelos
+├── requirements.txt    # Dependencias de Python
+└── README.md           # Documentación
 ```
 
-## Instalación y Configuración
+## ✅ Validación del Sistema
 
-1.  **Clonar el repositorio**:
-
-    ```bash
-    git clone https://github.com/tu-usuario/ecommerce-recsys-engine.git
-    cd ecommerce-recsys-engine
-    ```
-
-2.  **Crear entorno virtual**:
-
-    ```bash
-    python -m venv .venv
-    # Windows:
-    .\.venv\Scripts\Activate.ps1
-    # Linux/Mac:
-    source .venv/bin/activate
-    ```
-
-3.  **Instalar dependencias**:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4.  **Descargar Datos**:
-    Descarga `Online Retail.xlsx` desde Kaggle y colócalo en la carpeta `data/`.
-
-## Uso (Próximamente)
-
-### Ejecutar API
+Puedes ejecutar el script de validación para asegurar que todos los servicios responden correctamente:
 
 ```bash
-uvicorn app.main:app --reload
+python scripts/validate_system.py
 ```
 
-La documentación interactiva estará disponible en `http://localhost:8000/docs`.
+## 🤝 Contribución
 
-### Ejecutar Notebooks
+Las contribuciones son bienvenidas. Siéntete libre de abrir un Pull Request o Issue.
 
-```bash
-jupyter notebook
-```
+## 📄 Licencia
 
-## Contribución
-
-Las contribuciones son bienvenidas. Por favor, abre un issue primero para discutir cambios mayores.
-
-## Licencia
-
-[MIT](https://choosealicense.com/licenses/mit/)
+Este proyecto está bajo la Licencia MIT.
